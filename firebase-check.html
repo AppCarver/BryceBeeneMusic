@@ -67,12 +67,25 @@
 
         window.onload = async function () {
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-
             const statusMessageDiv = document.getElementById('status-message');
             const epkStatusP = document.getElementById('epk-status');
             const emailsStatusP = document.getElementById('emails-status');
             const emailListDiv = document.getElementById('email-list');
+
+            let firebaseConfig;
+            try {
+                if (typeof __firebase_config === 'undefined') {
+                    throw new Error("Firebase config variable is not defined.");
+                }
+                firebaseConfig = JSON.parse(__firebase_config);
+            } catch (error) {
+                console.error("Firebase Configuration Error:", error);
+                statusMessageDiv.textContent = `Error: ${error.message}. Please ensure Firebase is correctly configured.`;
+                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-200 text-red-800';
+                epkStatusP.textContent = 'Failed to connect to Firebase.';
+                emailsStatusP.textContent = 'Failed to connect to Firebase.';
+                return;
+            }
 
             let app, db, auth;
             try {
