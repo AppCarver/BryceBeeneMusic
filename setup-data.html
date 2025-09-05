@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Data Setup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f0e5;
+            color: #0b2447;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 30rem;
+        }
+
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 4rem;
+            height: 4px;
+            background-color: #576f72;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mx-auto bg-white p-8 rounded-lg shadow-xl">
+        <h1 class="text-3xl font-bold section-title">Set up Firebase Data</h1>
+
+        <form id="setup-form" class="space-y-4">
+            <p id="message" class="text-center text-gray-600 mb-6"></p>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Set EPK Password</label>
+                <input type="password" id="password" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Add Test Newsletter Email</label>
+                <input type="email" id="email" value="test@example.com"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+
+            <button type="submit"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Run Setup
+            </button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Import SHA-256 library
+        import { sha256 } from "https://cdn.jsdelivr.net/npm/js-sha256@0.11.0/dist/sha256.mjs";
+
+        window.onload = async function () {
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const setupForm = document.getElementById('setup-form');
+            const messageEl = document.getElementById('message');
+
+            let firebaseConfig;
+            if (typeof __firebase_config === 'undefined') {
+                messageEl.textContent = 'Warning: Firebase config not found. Using a placeholder config.';
+                messageEl.className = 'text-orange-600';
+                firebaseConfig = {
+                    apiKey: "dummy-api-key",
+                    authDomain: "dummy-auth-domain",
+                    projectId: "dummy-project-id"
+                };
+            } else {
+                firebaseConfig = JSON.parse(__firebase_config);
+            }
+
+            let app, db, auth;
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+            } catch (error) {
+                messageEl.textContent = 'Error: Firebase failed to initialize. Check your configuration.';
+                messageEl.className = 'text-red-600';
+                console.error("Firebase Initialization Error:", error);
+                return;
+            }
+
+            try {
+                await signInAnonymously(auth);
+            } catch (error) {
+                messageEl.textContent = 'Error: Failed to authenticate anonymously. Check your authentication settings.';
+                messageEl.className = 'text-red-600';
+                console.error("Anonymous Sign-in Error:", error);
+                return;
+            }
+
+            setupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const password = document.getElementById('password').value;
+                const email = document.getElementById('email').value;
+
+                if (!password || !email) {
+                    messageEl.textContent = 'Please fill out both fields.';
+                    return;
+                }
+
+                messageEl.textContent = 'Saving data...';
+                messageEl.className = 'text-gray-600';
+
+                try {
+                    // 1. Save EPK Password Hash
+                    const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
+                    const passwordHash = sha256(password);
+                    await setDoc(passwordDocRef, {
+                        hash: passwordHash
+                    });
+
+                    // 2. Add Test Newsletter Email
+                    const emailCollectionRef = collection(db, `/artifacts/${appId}/public/data/newsletter_emails`);
+                    await addDoc(emailCollectionRef, {
+                        email: email,
+                        timestamp: new Date().toISOString()
+                    });
+
+                    messageEl.textContent = 'Success! Data saved to Firebase. This page will now redirect.';
+                    messageEl.className = 'text-green-600 font-bold';
+
+                    // Redirect to the check page after a delay to show success message
+                    setTimeout(() => {
+                        window.location.href = 'firebase-check.html';
+                    }, 2000);
+
+                } catch (error) {
+                    messageEl.textContent = `Error saving data. Details: ${error.message}`;
+                    messageEl.className = 'text-red-600 font-bold';
+                    console.error("Error saving to Firestore:", error);
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>
