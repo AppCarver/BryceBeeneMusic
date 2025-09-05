@@ -173,7 +173,7 @@
                     <div id="password-form">
                         <input type="password" id="password-input" placeholder="Enter password"
                             class="w-full max-w-[15rem] px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors duration-300 mb-2 text-center">
-                        <button onclick="handlePasswordCheck()"
+                        <button id="password-button"
                             class="bg-accent text-white px-6 py-2 rounded-full font-semibold hover:bg-accent/80 transition-colors duration-300">Submit</button>
                     </div>
 
@@ -293,7 +293,7 @@
                     <div class="flex flex-col gap-4">
                         <input type="email" id="email-input" placeholder="Enter your email" required
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors duration-300">
-                        <button onclick="submitEmail()"
+                        <button id="email-button"
                             class="bg-accent text-white px-6 py-2 rounded-full font-semibold hover:bg-accent/80 transition-colors duration-300">Subscribe</button>
                     </div>
                     <p id="email-message" class="mt-4 text-sm font-semibold text-green-700 hidden"></p>
@@ -312,7 +312,7 @@
                 class="hover:text-accent transition-colors duration-300">
                 <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd"
-                        d="M12.315 2c2.43 0 2.685.006 3.62.052.87.04 1.494.174 2.043.372a3.723 3.723 0 001.482.827c.581.252.93.599 1.25.992.333.395.625.797.915 1.408.283.606.452 1.25.56 2.04.117.843.118 1.139.118 2.441v3.297c0 1.302-.001 1.599-.118 2.44-.108.79-.277 1.433-.56 2.039a3.73 3.73 0 01-.915 1.409c-.32.393-.669.74-1.25.991-.549.198-1.173.332-2.043.372-.935.045-1.19.052-3.62.052-2.428 0-2.684-.007-3.62-.052-.87-.04-1.494-.174-2.043-.372a3.724 3.724 0 01-1.482-.827c-.58-.252-.93-.599-1.25-.992-.333-.395-.625-.797-.915-1.408-.283-.606-.452-1.25-.56-2.04-.117-.843-.118-1.139-.118-2.44v-3.297c0-1.302.001-1.599.118-2.44.108-.79.277-1.433.56-2.04.29-.61.582-1.012.915-1.408.32-.393.67-.74 1.25-.992.549-.198 1.173-.332 2.043-.372.935-.045 1.19-.052 3.62-.052zm0-2a5.727 5.727 0 00-4.661 1.745A5.719 5.719 0 005 12.315v3.298c0 2.43.007 2.685.052 3.62.04 2.015.398 3.398 1.744 4.744a5.717 5.717 0 004.744 1.744c2.43 0 2.685-.007 3.62-.052 2.015-.04 3.398-.398 4.744-1.744a5.719 5.719 0 001.745-4.744c.045-.935.052-1.19.052-3.62v-3.297c0-2.43-.007-2.685-.052-3.62-.04-2.015-.398-3.398-1.744-4.744A5.719 5.719 0 0015.685 5c-.935-.045-1.19-.052-3.62-.052zm0 4a3 3 0 100 6 3 3 0 000-6zm0 4a1 1 0 110-2 1 1 0 010 2zm6.273-5.26a.91.91 0 01.91.91.91.91 0 01-.91.91.91.91 0 01-.91-.91c0-.501.409-.91.91-.91z"
+                        d="M12.315 2c2.43 0 2.685.006 3.62.052.87.04 1.494.174 2.043.372a3.723 3.723 0 001.482.827c.581.252.93.599 1.25.992.333.395.625.797.915 1.408.283.606.452 1.25.56 2.04.117.843.118 1.139.118 2.441v3.297c0 1.302-.001 1.599-.118 2.44-.108.79-.277 1.433-.56 2.039a3.73 3.73 0 01-.915 1.409c-.32.393-.669.74-1.25.991-.549.198-1.173.332-2.043.372-.935.045-1.19.052-3.62.052-2.428 0-2.684-.007-3.62-.052-.87-.04-1.494-.174-2.043-.372a3.724 3.724 0 01-1.482-.827c-.58-.252-.93-.599-1.25-.992-.333-.395-.625-.797-.915-1.408-.283-.606-.452-1.25-.56-2.04-.117-.843-.118-1.139-.118-2.44v-3.297c0-1.302.001-1.599.118-2.44.108-.79.277-1.433.56-2.04.29-.61.582-1.012.915-1.408.32-.393.67-.74 1.25-.992.549-.198 1.173-.332 2.043-.372.935-.045 1.19-.052 3.62-.052zm0-2a5.727 5.727 0 00-4.661 1.745A5.719 5.719 0 005 12.315v3.298c0 2.43.007 2.685.052 3.62.04 2.015.398 3.398 1.744 4.744a5.717 5.717 0 004.744 1.744c2.43 0 2.685-.007 3.62-.052 2.015-.04 3.398-.398 4.744-1.744a5.719 5.719 0 001.745-4.744c.045-.935.052-1.19.052-3.62v-3.297c0-2.43-.007-2.685-.052-3.62-.04-2.015-.398-3.398-1.744-4.744A5.719 5.719 0 0015.685 5c-.935-.045-1.19-.052-3.62-.052zm0 4a3 3 0 100 6 3 3 0 000-6zm0 4a1 1 1 010-2 1 1 0 010 2zm6.273-5.26a.91.91 0 01.91.91.91.91 0 01-.91.91.91.91 0 01-.91-.91c0-.501.409-.91.91-.91z"
                         clip-rule="evenodd" />
                 </svg>
             </a>
@@ -339,119 +339,131 @@
         // Import Firebase and Firestore functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, addDoc, collection, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase configuration (provided by the environment)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        window.onload = function () {
+            // Firebase configuration (provided by the environment)
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        // Initialize Firebase services
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        // Function to hash a string using SHA-256
-        async function hashString(str) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(str);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
-
-        async function handlePasswordCheck() {
-            const passwordInput = document.getElementById('password-input');
-            const unreleasedContent = document.getElementById('unreleased-content');
-            const errorMessage = document.getElementById('error-message');
-
+            // Initialize Firebase services
+            let app, db, auth;
             try {
-                // Authenticate anonymously to access the public Firestore data
-                await signInAnonymously(auth);
-
-                // Path to the document containing the hashed password.
-                // It is stored in a publicly readable collection.
-                const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
-
-                // Fetch the hashed password from Firestore
-                const passwordDocSnap = await getDoc(passwordDocRef);
-
-                if (passwordDocSnap.exists()) {
-                    const storedHash = passwordDocSnap.data().hash;
-                    const enteredPassword = passwordInput.value;
-                    const enteredHash = await hashString(enteredPassword);
-
-                    if (enteredHash === storedHash) {
-                        unreleasedContent.classList.remove('hidden');
-                        passwordInput.classList.add('hidden');
-                        errorMessage.classList.add('hidden');
-                    } else {
-                        errorMessage.classList.remove('hidden');
-                    }
-                } else {
-                    console.error("Password document does not exist. Please create it in Firestore.");
-                    // In a real app, you would have a more user-friendly message
-                    errorMessage.textContent = "Configuration error. Please try again later.";
-                    errorMessage.classList.remove('hidden');
-                }
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
             } catch (error) {
-                console.error("Error during password check:", error);
-                errorMessage.textContent = "An error occurred. Please try again.";
-                errorMessage.classList.remove('hidden');
-            }
-        }
-
-        // Function to handle email submission to Firestore
-        async function submitEmail() {
-            const emailInput = document.getElementById('email-input');
-            const emailMessage = document.getElementById('email-message');
-            const email = emailInput.value.trim();
-
-            if (!email) {
-                emailMessage.textContent = 'Please enter a valid email address.';
-                emailMessage.classList.remove('text-green-700', 'hidden');
-                emailMessage.classList.add('text-red-500');
+                console.error("Firebase Initialization Error:", error);
                 return;
             }
 
-            try {
-                // Sign in anonymously to allow write access
-                await signInAnonymously(auth);
-
-                // Add a new document to the 'newsletter_emails' collection
-                const emailsCollection = collection(db, `/artifacts/${appId}/public/data/newsletter_emails`);
-                await addDoc(emailsCollection, {
-                    email: email,
-                    timestamp: new Date().toISOString()
-                });
-
-                emailMessage.textContent = 'Thank you for subscribing! We will be in touch soon.';
-                emailMessage.classList.remove('text-red-500', 'hidden');
-                emailMessage.classList.add('text-green-700');
-                emailInput.value = ''; // Clear the input field
-
-            } catch (error) {
-                console.error("Error adding email to database:", error);
-                emailMessage.textContent = 'There was an error. Please try again.';
-                emailMessage.classList.remove('text-green-700', 'hidden');
-                emailMessage.classList.add('text-red-500');
+            // Function to hash a string using SHA-256
+            async function hashString(str) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(str);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                return hashHex;
             }
-        }
 
-        // IMPORTANT: Initial setup for the password.
-        // This is a one-time operation to create the hashed password in Firestore.
-        // Uncomment this section, run it once, and then re-comment it.
-        /*
-        async function setupInitialPassword() {
-            const correctPassword = 'BryceEPK';
-            const hashedPassword = await hashString(correctPassword);
-            const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
-            await setDoc(passwordDocRef, { hash: hashedPassword });
-            console.log("Initial password hash created in Firestore:", hashedPassword);
+            async function handlePasswordCheck() {
+                const passwordInput = document.getElementById('password-input');
+                const unreleasedContent = document.getElementById('unreleased-content');
+                const passwordForm = document.getElementById('password-form');
+                const errorMessage = document.getElementById('error-message');
+
+                try {
+                    // Authenticate anonymously to access the public Firestore data
+                    await signInAnonymously(auth);
+
+                    // Path to the document containing the hashed password.
+                    const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
+
+                    // Fetch the hashed password from Firestore
+                    const passwordDocSnap = await getDoc(passwordDocRef);
+
+                    if (passwordDocSnap.exists()) {
+                        const storedHash = passwordDocSnap.data().hash;
+                        const enteredPassword = passwordInput.value;
+                        const enteredHash = await hashString(enteredPassword);
+
+                        if (enteredHash === storedHash) {
+                            unreleasedContent.classList.remove('hidden');
+                            passwordForm.classList.add('hidden');
+                            errorMessage.classList.add('hidden');
+                        } else {
+                            errorMessage.textContent = "Incorrect password. Please try again.";
+                            errorMessage.classList.remove('hidden');
+                        }
+                    } else {
+                        console.error("Password document does not exist. Please create it in Firestore.");
+                        errorMessage.textContent = "Configuration error. Please try again later.";
+                        errorMessage.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    console.error("Error during password check:", error);
+                    errorMessage.textContent = "An error occurred. Please try again.";
+                    errorMessage.classList.remove('hidden');
+                }
+            }
+
+            // Function to handle email submission to Firestore
+            async function submitEmail() {
+                const emailInput = document.getElementById('email-input');
+                const emailMessage = document.getElementById('email-message');
+                const email = emailInput.value.trim();
+
+                if (!email) {
+                    emailMessage.textContent = 'Please enter a valid email address.';
+                    emailMessage.classList.remove('text-green-700', 'hidden');
+                    emailMessage.classList.add('text-red-500');
+                    return;
+                }
+
+                try {
+                    // Sign in anonymously to allow write access
+                    await signInAnonymously(auth);
+
+                    // Add a new document to the 'newsletter_emails' collection
+                    const emailsCollection = collection(db, `/artifacts/${appId}/public/data/newsletter_emails`);
+                    await addDoc(emailsCollection, {
+                        email: email,
+                        timestamp: new Date().toISOString()
+                    });
+
+                    emailMessage.textContent = 'Thank you for subscribing! We will be in touch soon.';
+                    emailMessage.classList.remove('text-red-500', 'hidden');
+                    emailMessage.classList.add('text-green-700');
+                    emailInput.value = ''; // Clear the input field
+
+                } catch (error) {
+                    console.error("Error adding email to database:", error);
+                    emailMessage.textContent = 'There was an error. Please try again.';
+                    emailMessage.classList.remove('text-green-700', 'hidden');
+                    emailMessage.classList.add('text-red-500');
+                }
+            }
+
+            // Attach the event listeners to the buttons
+            document.getElementById('password-button').addEventListener('click', handlePasswordCheck);
+            document.getElementById('email-button').addEventListener('click', submitEmail);
+
+            // IMPORTANT: Initial setup for the password.
+            // This is a one-time operation to create the hashed password in Firestore.
+            // Uncomment this section, run it once, and then re-comment it.
+            /*
+            async function setupInitialPassword() {
+                const correctPassword = 'BryceEPK';
+                const hashedPassword = await hashString(correctPassword);
+                const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
+                await setDoc(passwordDocRef, { hash: hashedPassword });
+                console.log("Initial password hash created in Firestore:", hashedPassword);
+            }
+            setupInitialPassword();
+            */
         }
-        setupInitialPassword();
-        */
     </script>
 </body>
 

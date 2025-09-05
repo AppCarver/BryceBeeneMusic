@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Newsletter Subscribers</title>
+    <title>Bryce Beene - Admin Panel</title>
+    <!-- Use the Inter and Lora fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -12,58 +18,119 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8f0e5;
             color: #0b2447;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 2rem;
+        }
+
+        .container {
+            max-width: 80rem;
+        }
+
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            font-family: 'Lora', serif;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 4rem;
+            height: 4px;
+            background-color: #576f72;
+            border-radius: 9999px;
+        }
+
+        .text-accent {
+            color: #576f72;
+        }
+
+        .bg-primary {
+            background-color: #0b2447;
+        }
+
+        .bg-secondary {
+            background-color: #f8f0e5;
+        }
+
+        .bg-accent {
+            background-color: #576f72;
+        }
+
+        .font-headline {
+            font-family: 'Lora', serif;
         }
     </style>
 </head>
 
 <body>
-    <div class="bg-white p-8 rounded-lg shadow-xl max-w-2xl w-full">
-        <h1 class="text-3xl font-bold font-headline mb-6 text-center">Admin Access</h1>
 
-        <!-- Password Form -->
-        <div id="password-form">
-            <p class="text-sm text-center text-gray-600 mb-4">Enter the password to view subscriber emails.</p>
-            <input type="password" id="password-input" placeholder="Enter password"
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors duration-300 mb-2 text-center">
-            <button onclick="handlePasswordCheck()"
-                class="w-full bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-300">Submit</button>
-            <p id="error-message" class="text-red-500 mt-2 text-center hidden">Incorrect password. Please try again.</p>
-        </div>
-
-        <!-- Emails Display (Initially hidden) -->
-        <div id="emails-container" class="hidden mt-8">
-            <h2 class="text-2xl font-bold font-headline mb-4">Newsletter Subscribers</h2>
-            <p class="text-sm text-gray-600 mb-4">User ID: <span id="user-id" class="font-mono">Loading...</span></p>
-            <div id="emails-list" class="space-y-2">
-                <!-- Emails will be dynamically added here -->
+    <nav class="bg-primary sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center text-white">
+            <a href="#" class="text-2xl font-bold font-headline tracking-widest text-white">BRYCE BEENE - ADMIN</a>
+            <div class="flex space-x-4">
+                <a href="#emails"
+                    class="px-3 py-2 hover:text-accent transition-colors duration-300 rounded-full">Emails</a>
+                <a href="#epk" class="px-3 py-2 hover:text-accent transition-colors duration-300 rounded-full">EPK
+                    Password</a>
             </div>
         </div>
-    </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-16 sm:px-12">
+        <section id="emails" class="mb-16">
+            <h2 class="text-3xl font-bold section-title mb-8">Subscriber Emails</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div id="email-list" class="space-y-4">
+                    <p class="text-gray-500 italic">Loading emails...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="epk" class="mb-16">
+            <h2 class="text-3xl font-bold section-title mb-8">EPK Password Management</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-700">Current Password:</p>
+                    <p id="current-password" class="text-lg font-bold text-accent">***********</p>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-lg">Change Password</h3>
+                    <input type="password" id="new-password-input" placeholder="Enter new password"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors duration-300">
+                    <button id="update-password-button"
+                        class="bg-accent text-white px-6 py-2 rounded-full font-semibold hover:bg-accent/80 transition-colors duration-300">Update
+                        Password</button>
+                    <p id="password-message" class="mt-2 text-sm font-semibold text-green-700 hidden"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-primary text-white py-6 mt-16 text-center">
+        <p>&copy; 2025 Bryce Beene. Admin Panel.</p>
+    </footer>
 
     <script type="module">
-        // Import Firebase and Firestore functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, onSnapshot, collection, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase configuration (provided by the environment)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        window.onload = function () {
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 
-        // Check for the Firebase project ID before initializing
-        if (!firebaseConfig.projectId) {
-            console.error('Firebase Error: "projectId" not provided in the environment. Please ensure the Firebase configuration is set up correctly.');
-        } else {
-            // Initialize Firebase services
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
-            const auth = getAuth(app);
+            let app, db, auth;
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+            } catch (error) {
+                console.error("Firebase Initialization Error:", error);
+                return;
+            }
 
             // Function to hash a string using SHA-256
             async function hashString(str) {
@@ -75,79 +142,74 @@
                 return hashHex;
             }
 
-            async function fetchEmails() {
-                const emailsList = document.getElementById('emails-list');
-                emailsList.innerHTML = '<p>Loading emails...</p>';
-
+            // Real-time listener for the emails
+            async function setupEmailListener() {
                 try {
-                    const q = query(collection(db, `/artifacts/${appId}/public/data/newsletter_emails`));
-                    const querySnapshot = await getDocs(q);
+                    await signInAnonymously(auth);
+                    const emailsCollection = collection(db, `/artifacts/${appId}/public/data/newsletter_emails`);
 
-                    if (querySnapshot.empty) {
-                        emailsList.innerHTML = '<p class="text-center text-gray-500">No subscribers yet.</p>';
-                        return;
-                    }
-
-                    emailsList.innerHTML = '';
-                    querySnapshot.forEach((doc) => {
-                        const email = doc.data().email;
-                        const timestamp = new Date(doc.data().timestamp).toLocaleString();
-                        const listItem = document.createElement('div');
-                        listItem.className = 'bg-gray-100 p-3 rounded-md text-sm';
-                        listItem.textContent = `${email} - Signed up on ${timestamp}`;
-                        emailsList.appendChild(listItem);
+                    onSnapshot(emailsCollection, (snapshot) => {
+                        const emailListDiv = document.getElementById('email-list');
+                        emailListDiv.innerHTML = ''; // Clear previous emails
+                        if (snapshot.empty) {
+                            emailListDiv.innerHTML = '<p class="text-gray-500 italic">No subscribers yet.</p>';
+                        } else {
+                            snapshot.forEach((doc) => {
+                                const emailData = doc.data();
+                                const emailElement = document.createElement('div');
+                                emailElement.className = 'bg-gray-100 p-3 rounded-md shadow-sm';
+                                emailElement.textContent = emailData.email;
+                                emailListDiv.appendChild(emailElement);
+                            });
+                        }
+                    }, (error) => {
+                        console.error("Error fetching emails:", error);
+                        document.getElementById('email-list').innerHTML = '<p class="text-red-500">Error loading emails.</p>';
                     });
-
                 } catch (error) {
-                    console.error("Error fetching emails:", error);
-                    emailsList.innerHTML = '<p class="text-red-500 text-center">Error loading emails. Check the console for details.</p>';
+                    console.error("Authentication Error:", error);
+                    document.getElementById('email-list').innerHTML = '<p class="text-red-500">Could not authenticate. Check your Firebase setup.</p>';
                 }
             }
 
-            async function handlePasswordCheck() {
-                const passwordInput = document.getElementById('password-input');
-                const passwordForm = document.getElementById('password-form');
-                const emailsContainer = document.getElementById('emails-container');
-                const errorMessage = document.getElementById('error-message');
-                const userIdSpan = document.getElementById('user-id');
+            // Function to update the password
+            async function updatePassword() {
+                const newPasswordInput = document.getElementById('new-password-input');
+                const passwordMessage = document.getElementById('password-message');
+                const newPassword = newPasswordInput.value.trim();
+
+                if (!newPassword) {
+                    passwordMessage.textContent = 'Password cannot be empty.';
+                    passwordMessage.classList.remove('hidden', 'text-green-700');
+                    passwordMessage.classList.add('text-red-500');
+                    return;
+                }
 
                 try {
-                    // Authenticate anonymously to access the public Firestore data
                     await signInAnonymously(auth);
-
-                    // Display the user ID for debugging/identification
-                    userIdSpan.textContent = auth.currentUser.uid;
-
-                    // Path to the document containing the hashed password.
+                    const hashedPassword = await hashString(newPassword);
                     const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
 
-                    // Fetch the hashed password from Firestore
-                    const passwordDocSnap = await getDoc(passwordDocRef);
+                    await setDoc(passwordDocRef, { hash: hashedPassword }, { merge: true });
 
-                    if (passwordDocSnap.exists()) {
-                        const storedHash = passwordDocSnap.data().hash;
-                        const enteredPassword = passwordInput.value;
-                        const enteredHash = await hashString(enteredPassword);
-
-                        if (enteredHash === storedHash) {
-                            passwordForm.classList.add('hidden');
-                            emailsContainer.classList.remove('hidden');
-                            fetchEmails(); // Fetch and display the emails
-                        } else {
-                            errorMessage.classList.remove('hidden');
-                        }
-                    } else {
-                        console.error("Password document does not exist. Please check the one-time setup on the main website.");
-                        errorMessage.textContent = "Configuration error. Please try again later.";
-                        errorMessage.classList.remove('hidden');
-                    }
+                    passwordMessage.textContent = 'Password updated successfully!';
+                    passwordMessage.classList.remove('hidden', 'text-red-500');
+                    passwordMessage.classList.add('text-green-700');
+                    newPasswordInput.value = '';
                 } catch (error) {
-                    console.error("Error during password check:", error);
-                    errorMessage.textContent = "An error occurred. Please try again.";
-                    errorMessage.classList.remove('hidden');
+                    console.error("Error updating password:", error);
+                    passwordMessage.textContent = 'Error updating password. Please try again.';
+                    passwordMessage.classList.remove('hidden', 'text-green-700');
+                    passwordMessage.classList.add('text-red-500');
                 }
             }
-        }
+
+            // Attach event listeners
+            document.getElementById('update-password-button').addEventListener('click', updatePassword);
+
+            // Initial setup
+            setupEmailListener();
+        };
     </script>
 </body>
 
