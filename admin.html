@@ -56,91 +56,96 @@
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        // Initialize Firebase services
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+        // Check for the Firebase project ID before initializing
+        if (!firebaseConfig.projectId) {
+            console.error('Firebase Error: "projectId" not provided in the environment. Please ensure the Firebase configuration is set up correctly.');
+        } else {
+            // Initialize Firebase services
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            const auth = getAuth(app);
 
-        // Function to hash a string using SHA-256
-        async function hashString(str) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(str);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
-
-        async function fetchEmails() {
-            const emailsList = document.getElementById('emails-list');
-            emailsList.innerHTML = '<p>Loading emails...</p>';
-
-            try {
-                const q = query(collection(db, `/artifacts/${appId}/public/data/newsletter_emails`));
-                const querySnapshot = await getDocs(q);
-
-                if (querySnapshot.empty) {
-                    emailsList.innerHTML = '<p class="text-center text-gray-500">No subscribers yet.</p>';
-                    return;
-                }
-
-                emailsList.innerHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const email = doc.data().email;
-                    const timestamp = new Date(doc.data().timestamp).toLocaleString();
-                    const listItem = document.createElement('div');
-                    listItem.className = 'bg-gray-100 p-3 rounded-md text-sm';
-                    listItem.textContent = `${email} - Signed up on ${timestamp}`;
-                    emailsList.appendChild(listItem);
-                });
-
-            } catch (error) {
-                console.error("Error fetching emails:", error);
-                emailsList.innerHTML = '<p class="text-red-500 text-center">Error loading emails. Check the console for details.</p>';
+            // Function to hash a string using SHA-256
+            async function hashString(str) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(str);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                return hashHex;
             }
-        }
 
-        async function handlePasswordCheck() {
-            const passwordInput = document.getElementById('password-input');
-            const passwordForm = document.getElementById('password-form');
-            const emailsContainer = document.getElementById('emails-container');
-            const errorMessage = document.getElementById('error-message');
-            const userIdSpan = document.getElementById('user-id');
+            async function fetchEmails() {
+                const emailsList = document.getElementById('emails-list');
+                emailsList.innerHTML = '<p>Loading emails...</p>';
 
-            try {
-                // Authenticate anonymously to access the public Firestore data
-                await signInAnonymously(auth);
+                try {
+                    const q = query(collection(db, `/artifacts/${appId}/public/data/newsletter_emails`));
+                    const querySnapshot = await getDocs(q);
 
-                // Display the user ID for debugging/identification
-                userIdSpan.textContent = auth.currentUser.uid;
+                    if (querySnapshot.empty) {
+                        emailsList.innerHTML = '<p class="text-center text-gray-500">No subscribers yet.</p>';
+                        return;
+                    }
 
-                // Path to the document containing the hashed password.
-                const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
+                    emailsList.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const email = doc.data().email;
+                        const timestamp = new Date(doc.data().timestamp).toLocaleString();
+                        const listItem = document.createElement('div');
+                        listItem.className = 'bg-gray-100 p-3 rounded-md text-sm';
+                        listItem.textContent = `${email} - Signed up on ${timestamp}`;
+                        emailsList.appendChild(listItem);
+                    });
 
-                // Fetch the hashed password from Firestore
-                const passwordDocSnap = await getDoc(passwordDocRef);
+                } catch (error) {
+                    console.error("Error fetching emails:", error);
+                    emailsList.innerHTML = '<p class="text-red-500 text-center">Error loading emails. Check the console for details.</p>';
+                }
+            }
 
-                if (passwordDocSnap.exists()) {
-                    const storedHash = passwordDocSnap.data().hash;
-                    const enteredPassword = passwordInput.value;
-                    const enteredHash = await hashString(enteredPassword);
+            async function handlePasswordCheck() {
+                const passwordInput = document.getElementById('password-input');
+                const passwordForm = document.getElementById('password-form');
+                const emailsContainer = document.getElementById('emails-container');
+                const errorMessage = document.getElementById('error-message');
+                const userIdSpan = document.getElementById('user-id');
 
-                    if (enteredHash === storedHash) {
-                        passwordForm.classList.add('hidden');
-                        emailsContainer.classList.remove('hidden');
-                        fetchEmails(); // Fetch and display the emails
+                try {
+                    // Authenticate anonymously to access the public Firestore data
+                    await signInAnonymously(auth);
+
+                    // Display the user ID for debugging/identification
+                    userIdSpan.textContent = auth.currentUser.uid;
+
+                    // Path to the document containing the hashed password.
+                    const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
+
+                    // Fetch the hashed password from Firestore
+                    const passwordDocSnap = await getDoc(passwordDocRef);
+
+                    if (passwordDocSnap.exists()) {
+                        const storedHash = passwordDocSnap.data().hash;
+                        const enteredPassword = passwordInput.value;
+                        const enteredHash = await hashString(enteredPassword);
+
+                        if (enteredHash === storedHash) {
+                            passwordForm.classList.add('hidden');
+                            emailsContainer.classList.remove('hidden');
+                            fetchEmails(); // Fetch and display the emails
+                        } else {
+                            errorMessage.classList.remove('hidden');
+                        }
                     } else {
+                        console.error("Password document does not exist. Please check the one-time setup on the main website.");
+                        errorMessage.textContent = "Configuration error. Please try again later.";
                         errorMessage.classList.remove('hidden');
                     }
-                } else {
-                    console.error("Password document does not exist. Please check the one-time setup on the main website.");
-                    errorMessage.textContent = "Configuration error. Please try again later.";
+                } catch (error) {
+                    console.error("Error during password check:", error);
+                    errorMessage.textContent = "An error occurred. Please try again.";
                     errorMessage.classList.remove('hidden');
                 }
-            } catch (error) {
-                console.error("Error during password check:", error);
-                errorMessage.textContent = "An error occurred. Please try again.";
-                errorMessage.classList.remove('hidden');
             }
         }
     </script>
