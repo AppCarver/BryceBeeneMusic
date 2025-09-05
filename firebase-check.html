@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Data Check</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f0e5;
+            color: #0b2447;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 48rem;
+        }
+
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 4rem;
+            height: 4px;
+            background-color: #576f72;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mx-auto bg-white p-8 rounded-lg shadow-xl">
+        <h1 class="text-3xl font-bold section-title">Firebase Connection Status</h1>
+
+        <div id="status-message" class="mb-6 p-4 rounded-lg text-center font-bold">
+            <p>Initializing Firebase and checking data...</p>
+        </div>
+
+        <div class="space-y-6">
+            <div id="epk-status-card" class="bg-gray-100 p-4 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold mb-2">EPK Password Hash</h2>
+                <p id="epk-status" class="text-sm italic text-gray-600">Checking...</p>
+            </div>
+
+            <div id="emails-status-card" class="bg-gray-100 p-4 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold mb-2">Newsletter Emails</h2>
+                <p id="emails-status" class="text-sm italic text-gray-600">Checking...</p>
+                <div id="email-list" class="mt-4 space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        window.onload = async function () {
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+
+            const statusMessageDiv = document.getElementById('status-message');
+            const epkStatusP = document.getElementById('epk-status');
+            const emailsStatusP = document.getElementById('emails-status');
+            const emailListDiv = document.getElementById('email-list');
+
+            let app, db, auth;
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                statusMessageDiv.textContent = 'Firebase initialized successfully.';
+                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-green-200 text-green-800';
+            } catch (error) {
+                console.error("Firebase Initialization Error:", error);
+                statusMessageDiv.textContent = 'Firebase failed to initialize. Check your configuration.';
+                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-200 text-red-800';
+                epkStatusP.textContent = 'Failed to connect to Firebase.';
+                emailsStatusP.textContent = 'Failed to connect to Firebase.';
+                return;
+            }
+
+            try {
+                await signInAnonymously(auth);
+            } catch (error) {
+                console.error("Anonymous Sign-in Error:", error);
+                statusMessageDiv.textContent = 'Failed to authenticate anonymously.';
+                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-200 text-red-800';
+                epkStatusP.textContent = 'Authentication failed.';
+                emailsStatusP.textContent = 'Authentication failed.';
+                return;
+            }
+
+            // Check for the EPK password hash
+            try {
+                const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
+                const passwordDocSnap = await getDoc(passwordDocRef);
+                if (passwordDocSnap.exists()) {
+                    epkStatusP.textContent = 'EPK password hash found!';
+                    epkStatusP.className = 'text-green-700 font-bold';
+                } else {
+                    epkStatusP.textContent = 'EPK password hash NOT found. Please run the password setup from index.html.';
+                    epkStatusP.className = 'text-red-700 font-bold';
+                }
+            } catch (error) {
+                console.error("Error fetching EPK password:", error);
+                epkStatusP.textContent = 'Error fetching EPK password hash. Check security rules.';
+                epkStatusP.className = 'text-red-700 font-bold';
+            }
+
+            // Check for newsletter emails
+            try {
+                const emailsCollection = collection(db, `/artifacts/${appId}/public/data/newsletter_emails`);
+                const emailsSnapshot = await getDocs(emailsCollection);
+                if (emailsSnapshot.empty) {
+                    emailsStatusP.textContent = 'No newsletter emails found.';
+                    emailsStatusP.className = 'text-orange-700 font-bold';
+                } else {
+                    emailsStatusP.textContent = `${emailsSnapshot.size} email(s) found.`;
+                    emailsStatusP.className = 'text-green-700 font-bold';
+
+                    emailsSnapshot.forEach(doc => {
+                        const emailData = doc.data();
+                        const emailP = document.createElement('p');
+                        emailP.textContent = `• ${emailData.email}`;
+                        emailP.className = 'p-2 bg-white rounded-md';
+                        emailListDiv.appendChild(emailP);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching emails:", error);
+                emailsStatusP.textContent = 'Error fetching newsletter emails. Check security rules.';
+                emailsStatusP.className = 'text-red-700 font-bold';
+            }
+        };
+    </script>
+</body>
+
+</html>
