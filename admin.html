@@ -158,7 +158,8 @@
                 document.getElementById('admin-content').classList.remove('hidden');
 
                 // Real-time listener for the emails
-                const emailsCollectionRef = collection(db, 'artifacts', 'YOUR_APP_ID', 'public', 'data', 'newsletter_emails');
+                // NOTE: The 'YOUR_APP_ID' placeholder has been replaced with the variable 'appId'
+                const emailsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'newsletter_emails');
                 console.log("Attempting to read from nested path.");
 
                 onSnapshot(emailsCollectionRef, (snapshot) => {
@@ -226,6 +227,54 @@
         if (downloadButton) {
             downloadButton.addEventListener('click', downloadEmailsAsCsv);
         }
+
+        // ----------------------------------------------------
+        // EPK PASSWORD UPDATE LOGIC - IMPLEMENTED BUG FIX
+        // ----------------------------------------------------
+        const newPasswordInput = document.getElementById('new-password-input');
+        const updatePasswordButton = document.getElementById('update-password-button');
+        const passwordMessage = document.getElementById('password-message');
+
+        updatePasswordButton.addEventListener('click', async () => {
+            const newPassword = newPasswordInput.value;
+            if (newPassword.length === 0) {
+                passwordMessage.textContent = 'Please enter a password.';
+                passwordMessage.classList.remove('hidden');
+                passwordMessage.classList.remove('text-green-700');
+                passwordMessage.classList.add('text-red-500');
+                return;
+            }
+
+            try {
+                // Hash the new password using the existing function
+                const hashedPassword = await sha256(newPassword);
+
+                // Reference the specific document to update
+                const passwordDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'epk', 'unreleased_password');
+
+                // Update the 'hash' field in the document
+                await setDoc(passwordDocRef, {
+                    hash: hashedPassword
+                });
+
+                // Display success message
+                passwordMessage.textContent = 'Password updated successfully!';
+                passwordMessage.classList.remove('hidden', 'text-red-500');
+                passwordMessage.classList.add('text-green-700');
+                newPasswordInput.value = ''; // Clear the input field
+
+                console.log("EPK password updated successfully.");
+
+            } catch (error) {
+                console.error("Error updating password:", error);
+                passwordMessage.textContent = 'Error updating password: ' + error.message;
+                passwordMessage.classList.remove('hidden', 'text-green-700');
+                passwordMessage.classList.add('text-red-500');
+            }
+        });
+        // ----------------------------------------------------
+        // END OF EPK PASSWORD UPDATE LOGIC
+        // ----------------------------------------------------
 
 
         // SHA256 hashing function
