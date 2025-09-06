@@ -78,15 +78,14 @@
             messagingSenderId: "654657678235",
             appId: "1:654657678235:web:8bd42df86f8c611f45cf3e"
         });
-        const __app_id = "YOUR_APP_ID"; // Use the 'appId' value from above
+        const __app_id = "1:654657678235:web:8bd42df86f8c611f45cf3e"; // Use the 'appId' value from above
     </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Use a different, working CDN for the SHA-256 library
-        import { sha256 } from "https://cdn.skypack.dev/js-sha256@0.11.0";
+        // Removed the import for js-sha256 and will use the native Web Crypto API
 
         window.onload = async function () {
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -143,7 +142,7 @@
                 try {
                     // 1. Save EPK Password Hash
                     const passwordDocRef = doc(db, `/artifacts/${appId}/public/data/epk/unreleased_password`);
-                    const passwordHash = sha256(password);
+                    const passwordHash = await sha256(password); // This now correctly awaits the async function
                     await setDoc(passwordDocRef, {
                         hash: passwordHash
                     });
@@ -170,6 +169,15 @@
                 }
             });
         };
+
+        // SHA256 hashing function using Web Crypto API for consistency
+        async function sha256(str) {
+            const textAsBuffer = new TextEncoder().encode(str);
+            const hashBuffer = await window.crypto.subtle.digest('SHA-256', textAsBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashedPassword;
+        }
     </script>
 </body>
 
