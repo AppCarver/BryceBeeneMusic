@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bryce Beene - Admin Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f0e5;
+            color: #0b2447;
+        }
+
+        .container {
+            max-width: 40rem;
+        }
+
+        .bg-primary {
+            background-color: #0b2447;
+        }
+
+        .bg-accent {
+            background-color: #576f72;
+        }
+
+        .font-headline {
+            font-family: 'Lora', serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="bg-primary sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center text-white">
+            <span class="text-2xl font-bold font-headline tracking-widest text-white">BRYCE BEENE - ADMIN</span>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-16 sm:px-12">
+        <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+            <h2 class="text-3xl font-bold mb-6 font-headline">Admin Login</h2>
+            <div class="space-y-4 max-w-sm mx-auto">
+                <input type="email" id="email-input" placeholder="Enter your email"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors duration-300">
+                <input type="password" id="password-input" placeholder="Enter your password"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors duration-300">
+                <button id="login-button"
+                    class="w-full bg-accent text-white px-6 py-2 rounded-full font-semibold hover:bg-accent/80 transition-colors duration-300">Log
+                    In</button>
+                <p id="error-message" class="mt-2 text-sm font-semibold text-red-500 hidden"></p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-primary text-white py-6 mt-16 text-center">
+        <p>&copy; 2025 Bryce Beene. Admin Panel.</p>
+    </footer>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // Paste your firebaseConfig block here, just as you did with the other files
+        const __firebase_config = JSON.stringify({
+            apiKey: "AIzaSyDJxQj1GazWOhIuEHtg51safP3lxVAxBpA",
+            authDomain: "bryce-beene-website.firebaseapp.com",
+            projectId: "bryce-beene-website",
+            storageBucket: "bryce-beene-website.firebasestorage.app",
+            messagingSenderId: "654657678235",
+            appId: "1:654657678235:web:8bd42df86f8c611f45cf3e"
+        });
+        const __app_id = "YOUR_APP_ID";
+
+        window.onload = function () {
+            const firebaseConfig = JSON.parse(__firebase_config);
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+
+            const emailInput = document.getElementById('email-input');
+            const passwordInput = document.getElementById('password-input');
+            const loginButton = document.getElementById('login-button');
+            const errorMessage = document.getElementById('error-message');
+
+            loginButton.addEventListener('click', async () => {
+                errorMessage.classList.add('hidden');
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    // Redirect to the admin panel after successful login
+                    window.location.href = 'admin.html';
+                } catch (error) {
+                    errorMessage.textContent = 'Login failed: ' + error.message;
+                    errorMessage.classList.remove('hidden');
+                    console.error("Login failed:", error);
+                }
+            });
+        };
+    </script>
+
+</body>
+
+</html>

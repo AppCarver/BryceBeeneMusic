@@ -7,6 +7,8 @@
     <title>Firebase Data Setup</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8f0e5;
@@ -67,14 +69,24 @@
             </button>
         </form>
     </div>
-
+    <script>
+        const __firebase_config = JSON.stringify({
+            apiKey: "AIzaSyDJxQj1GazWOhIuEHtg51safP3lxVAxBpA",
+            authDomain: "bryce-beene-website.firebaseapp.com",
+            projectId: "bryce-beene-website",
+            storageBucket: "bryce-beene-website.firebasestorage.app",
+            messagingSenderId: "654657678235",
+            appId: "1:654657678235:web:8bd42df86f8c611f45cf3e"
+        });
+        const __app_id = "YOUR_APP_ID"; // Use the 'appId' value from above
+    </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Import SHA-256 library
-        import { sha256 } from "https://cdn.jsdelivr.net/npm/js-sha256@0.11.0/dist/sha256.mjs";
+        // Use a different, working CDN for the SHA-256 library
+        import { sha256 } from "https://cdn.skypack.dev/js-sha256@0.11.0";
 
         window.onload = async function () {
             const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
