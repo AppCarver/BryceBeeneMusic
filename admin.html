@@ -72,9 +72,13 @@
         <div class="container mx-auto px-6 py-4 flex justify-between items-center text-white">
             <a href="#" class="text-2xl font-bold font-headline tracking-widest text-white">BRYCE BEENE - ADMIN</a>
             <div class="flex space-x-4 items-center">
+                <span id="user-email" class="font-semibold text-sm"></span>
                 <a href="#emails"
                     class="px-3 py-2 hover:text-accent transition-colors duration-300 rounded-full">Emails</a>
                 <a href="#epk" class="px-3 py-2 hover:text-accent transition-colors duration-300 rounded-full">EPK
+                    Password</a>
+                <a href="#admin-pass"
+                    class="px-3 py-2 hover:text-accent transition-colors duration-300 rounded-full">Admin
                     Password</a>
                 <button id="logout-button"
                     class="bg-red-500 text-white px-4 py-2 rounded-full font-semibold hover:bg-red-600 transition-colors duration-300">Log
@@ -114,6 +118,27 @@
                 </div>
             </div>
         </section>
+
+        <section id="admin-pass" class="mb-16">
+            <h2 class="text-3xl font-bold section-title mb-8">Admin Password Management</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-lg">Change Your Admin Password</h3>
+                    <p class="text-gray-500 text-sm italic">
+                        Note: You must have recently logged in for this to work.
+                    </p>
+                    <div id="admin-password-form-wrapper">
+                        <input type="password" id="new-admin-password-input" placeholder="Enter new admin password"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors duration-300">
+                        <button id="update-admin-password-button"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-300">
+                            Update Admin Password
+                        </button>
+                    </div>
+                    <p id="admin-password-message" class="mt-2 text-sm font-semibold hidden"></p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <main id="login-section" class="flex justify-center items-center min-h-screen">
@@ -148,7 +173,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, onSnapshot, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const __app_id = "1:654657678235:web:8bd42df86f8c611f45cf3e";
@@ -177,6 +202,9 @@
         const passwordInput = document.getElementById('password');
         const errorMessage = document.getElementById('error-message');
 
+        // Get reference to the user email element
+        const userEmailSpan = document.getElementById('user-email');
+
         // AUTH CHECK AND MAIN APP LOGIC
         onAuthStateChanged(auth, (user) => {
             const loginSection = document.getElementById('login-section');
@@ -188,6 +216,7 @@
                 adminContent.classList.remove('hidden');
                 adminNav.classList.remove('hidden');
                 loginSection.classList.add('hidden');
+                userEmailSpan.textContent = user.email;
 
                 // Real-time listener for the emails
                 const emailsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'newsletter_emails');
@@ -217,6 +246,7 @@
                 loginSection.classList.remove('hidden');
                 adminContent.classList.add('hidden');
                 adminNav.classList.add('hidden');
+                userEmailSpan.textContent = '';
             }
         });
 
@@ -321,6 +351,55 @@
         });
         // ----------------------------------------------------
         // END OF EPK PASSWORD UPDATE LOGIC
+        // ----------------------------------------------------
+
+        // ----------------------------------------------------
+        // ADMIN PASSWORD UPDATE LOGIC
+        // ----------------------------------------------------
+        const newAdminPasswordInput = document.getElementById('new-admin-password-input');
+        const updateAdminPasswordButton = document.getElementById('update-admin-password-button');
+        const adminPasswordMessage = document.getElementById('admin-password-message');
+
+        updateAdminPasswordButton.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            const newPassword = newAdminPasswordInput.value;
+
+            if (!user) {
+                adminPasswordMessage.textContent = 'You must be logged in to change your password.';
+                adminPasswordMessage.classList.remove('hidden', 'text-green-700');
+                adminPasswordMessage.classList.add('text-red-500');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                adminPasswordMessage.textContent = 'Password must be at least 6 characters long.';
+                adminPasswordMessage.classList.remove('hidden', 'text-green-700');
+                adminPasswordMessage.classList.add('text-red-500');
+                return;
+            }
+
+            try {
+                await updatePassword(user, newPassword);
+                adminPasswordMessage.textContent = 'Admin password updated successfully!';
+                adminPasswordMessage.classList.remove('hidden', 'text-red-500');
+                adminPasswordMessage.classList.add('text-green-700');
+                newAdminPasswordInput.value = ''; // Clear the input
+            } catch (error) {
+                console.error("Error updating admin password:", error);
+                let errorMessageText = "Error: Please log out and log back in to change your password.";
+
+                // You can check for a specific error code to give a better message
+                if (error.code === 'auth/requires-recent-login') {
+                    errorMessageText = "For security, please log out and log back in before changing your password.";
+                }
+
+                adminPasswordMessage.textContent = errorMessageText;
+                adminPasswordMessage.classList.remove('hidden', 'text-green-700');
+                adminPasswordMessage.classList.add('text-red-500');
+            }
+        });
+        // ----------------------------------------------------
+        // END OF ADMIN PASSWORD UPDATE LOGIC
         // ----------------------------------------------------
 
 
