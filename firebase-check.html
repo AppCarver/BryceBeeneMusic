@@ -12,6 +12,10 @@
             background-color: #f8f0e5;
             color: #0b2447;
             padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
@@ -34,12 +38,40 @@
             background-color: #576f72;
             border-radius: 9999px;
         }
+
+        #login-form-container {
+            max-width: 24rem;
+            margin-bottom: 2rem;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container mx-auto bg-white p-8 rounded-lg shadow-xl">
+    <div id="login-form-container" class="w-full bg-white p-8 rounded-lg shadow-xl hidden">
+        <h2 class="text-2xl font-bold text-center mb-6">Admin Login</h2>
+        <form id="login-form" class="space-y-4">
+            <div>
+                <input id="email" name="email" type="email" autocomplete="email" required
+                    class="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    placeholder="Admin Email">
+            </div>
+            <div>
+                <input id="password" name="password" type="password" autocomplete="current-password" required
+                    class="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    placeholder="Password">
+            </div>
+            <div>
+                <button type="submit"
+                    class="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Sign in
+                </button>
+            </div>
+            <p id="error-message" class="text-red-500 text-center text-sm hidden"></p>
+        </form>
+    </div>
+
+    <div id="status-container" class="container mx-auto bg-white p-8 rounded-lg shadow-xl hidden">
         <h1 class="text-3xl font-bold section-title">Firebase Connection Status</h1>
 
         <div id="status-message" class="mb-6 p-4 rounded-lg text-center font-bold">
@@ -69,62 +101,78 @@
             messagingSenderId: "654657678235",
             appId: "1:654657678235:web:8bd42df86f8c611f45cf3e"
         });
-        const __app_id = "YOUR_APP_ID"; // Use the 'appId' value from above
+        const __app_id = "1:654657678235:web:8bd42df86f8c611f45cf3e";
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        window.onload = async function () {
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-            const statusMessageDiv = document.getElementById('status-message');
-            const epkStatusP = document.getElementById('epk-status');
-            const emailsStatusP = document.getElementById('emails-status');
-            const emailListDiv = document.getElementById('email-list');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const loginFormContainer = document.getElementById('login-form-container');
+        const statusContainer = document.getElementById('status-container');
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('error-message');
 
+        let app, db, auth;
+
+        window.onload = function () {
             let firebaseConfig;
             try {
                 if (typeof __firebase_config === 'undefined') {
                     throw new Error("Firebase config variable is not defined.");
                 }
                 firebaseConfig = JSON.parse(__firebase_config);
-            } catch (error) {
-                console.error("Firebase Configuration Error:", error);
-                statusMessageDiv.textContent = `Error: ${error.message}. Please ensure Firebase is correctly configured.`;
-                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-200 text-red-800';
-                epkStatusP.textContent = 'Failed to connect to Firebase.';
-                emailsStatusP.textContent = 'Failed to connect to Firebase.';
-                return;
-            }
-
-            let app, db, auth;
-            try {
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-                statusMessageDiv.textContent = 'Firebase initialized successfully.';
-                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-green-200 text-green-800';
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                statusMessageDiv.textContent = 'Firebase failed to initialize. Check your configuration.';
-                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-200 text-red-800';
-                epkStatusP.textContent = 'Failed to connect to Firebase.';
-                emailsStatusP.textContent = 'Failed to connect to Firebase.';
+                document.getElementById('status-message').textContent = `Error: ${error.message}.`;
+                document.getElementById('status-message').className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-200 text-red-800';
                 return;
             }
 
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is signed in, show status
+                    loginFormContainer.classList.add('hidden');
+                    statusContainer.classList.remove('hidden');
+                    checkData();
+                } else {
+                    // User is signed out, show login form
+                    loginFormContainer.classList.remove('hidden');
+                    statusContainer.classList.add('hidden');
+                }
+            });
+        };
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
             try {
-                await signInAnonymously(auth);
+                await signInWithEmailAndPassword(auth, email, password);
+                errorMessage.classList.add('hidden');
             } catch (error) {
-                console.error("Anonymous Sign-in Error:", error);
-                statusMessageDiv.textContent = 'Failed to authenticate anonymously.';
-                statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-200 text-red-800';
-                epkStatusP.textContent = 'Authentication failed.';
-                emailsStatusP.textContent = 'Authentication failed.';
-                return;
+                console.error("Login failed:", error.message);
+                errorMessage.textContent = 'Invalid email or password.';
+                errorMessage.classList.remove('hidden');
             }
+        });
+
+        async function checkData() {
+            const statusMessageDiv = document.getElementById('status-message');
+            const epkStatusP = document.getElementById('epk-status');
+            const emailsStatusP = document.getElementById('emails-status');
+            const emailListDiv = document.getElementById('email-list');
+
+            statusMessageDiv.textContent = 'Firebase initialized successfully.';
+            statusMessageDiv.className = 'mb-6 p-4 rounded-lg text-center font-bold bg-green-200 text-green-800';
 
             // Check for the EPK password hash
             try {
@@ -134,7 +182,7 @@
                     epkStatusP.textContent = 'EPK password hash found!';
                     epkStatusP.className = 'text-green-700 font-bold';
                 } else {
-                    epkStatusP.textContent = 'EPK password hash NOT found. Please run the password setup from index.html.';
+                    epkStatusP.textContent = 'EPK password hash NOT found.';
                     epkStatusP.className = 'text-red-700 font-bold';
                 }
             } catch (error) {
@@ -167,7 +215,7 @@
                 emailsStatusP.textContent = 'Error fetching newsletter emails. Check security rules.';
                 emailsStatusP.className = 'text-red-700 font-bold';
             }
-        };
+        }
     </script>
 </body>
 

@@ -4,7 +4,14 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "setup-data.html",
+      "firebase-check.html",
+      "admin-login.html",
+      "firebase_config.conf"
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Rule for the newsletter emails.
+    // Public users can only CREATE new documents.
+    // The admin user can read them.
+    // Final, Secure Rule (Allows Reading for Admin)
+    match /artifacts/{appId}/public/data/newsletter_emails/{emailId} {
+    allow create: if request.auth != null;
+    allow read: if request.auth.uid == 'BWwoQWz1VTSq4xPDffVhkXtWsy92';
+    }
+
+    // Rule for the EPK password.
+    // Public users can only READ the password hash.
+    // The admin user can UPDATE it.
+    // Final, Secure Rule (Remove 'create' permission)
+    match /artifacts/{appId}/public/data/epk/unreleased_password {
+    allow read: if request.auth != null;
+    allow update: if request.auth.uid == 'BWwoQWz1VTSq4xPDffVhkXtWsy92';
+    }
+
+    // Rule for the admin panel.
+    // This assumes you will move admin-only data to a separate path.
+    // Only the specified admin user can read and write to this path.
+    match /artifacts/{appId}/admin/{documentId} {
+      allow read, write: if request.auth.uid == 'BWwoQWz1VTSq4xPDffVhkXtWsy92';
+    }
+  }
+}

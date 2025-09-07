@@ -68,7 +68,7 @@
 
 <body>
 
-    <nav class="bg-primary sticky top-0 z-50 shadow-lg">
+    <nav class="bg-primary sticky top-0 z-50 shadow-lg hidden" id="admin-nav">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center text-white">
             <a href="#" class="text-2xl font-bold font-headline tracking-widest text-white">BRYCE BEENE - ADMIN</a>
             <div class="flex space-x-4 items-center">
@@ -116,13 +116,39 @@
         </section>
     </main>
 
+    <main id="login-section" class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-xl">
+            <h2 class="text-3xl font-bold text-center section-title">Admin Login</h2>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <input id="email" name="email" type="email" autocomplete="email" required
+                        class="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="Email address">
+                </div>
+                <div>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required
+                        class="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        placeholder="Password">
+                </div>
+                <div>
+                    <button type="submit"
+                        class="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Sign in
+                    </button>
+                </div>
+            </form>
+            <p id="error-message" class="text-red-500 text-center text-sm hidden"></p>
+        </div>
+    </main>
+
+
     <footer class="bg-primary text-white py-6 mt-16 text-center">
         <p>&copy; 2025 Bryce Beene. Admin Panel.</p>
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, onSnapshot, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const __app_id = "1:654657678235:web:8bd42df86f8c611f45cf3e";
@@ -137,31 +163,34 @@
             appId: __app_id
         };
 
-        console.log(firebaseConfig);
-
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-
-        console.log(`Intial App Complete ${app}`);
-
         const auth = getAuth(app);
         const db = getFirestore(app);
         const appId = __app_id;
 
         let emailsData = []; // This variable will store the emails for CSV download
 
+        // Get references to login form elements
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('error-message');
+
         // AUTH CHECK AND MAIN APP LOGIC
         onAuthStateChanged(auth, (user) => {
+            const loginSection = document.getElementById('login-section');
+            const adminContent = document.getElementById('admin-content');
+            const adminNav = document.getElementById('admin-nav');
+
             if (user) {
-                console.log("Admin user is logged in.");
-                console.log("Logged in user email:", user.email);
-                document.getElementById('admin-content').classList.remove('hidden');
+                // User is signed in, show the admin content
+                adminContent.classList.remove('hidden');
+                adminNav.classList.remove('hidden');
+                loginSection.classList.add('hidden');
 
                 // Real-time listener for the emails
-                // NOTE: The 'YOUR_APP_ID' placeholder has been replaced with the variable 'appId'
                 const emailsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'newsletter_emails');
-                console.log("Attempting to read from nested path.");
-
                 onSnapshot(emailsCollectionRef, (snapshot) => {
                     const emailListDiv = document.getElementById('email-list');
                     emailListDiv.innerHTML = '';
@@ -184,17 +213,35 @@
                 });
 
             } else {
-                console.log("No admin user found. Redirecting to login page.");
-                window.location.href = 'admin-login.html';
+                // User is signed out, show the login section
+                loginSection.classList.remove('hidden');
+                adminContent.classList.add('hidden');
+                adminNav.classList.add('hidden');
             }
         });
+
+        // Event listener for login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                errorMessage.classList.add('hidden');
+            } catch (error) {
+                console.error("Login failed:", error.message);
+                errorMessage.textContent = 'Invalid email or password.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+
 
         // Add this code to handle the logout button click
         const logoutButton = document.getElementById('logout-button');
         logoutButton.addEventListener('click', () => {
             signOut(auth).then(() => {
                 // Sign-out successful. The onAuthStateChanged listener will handle the redirect.
-                console.log("User signed out successfully.");
             }).catch((error) => {
                 // An error happened.
                 console.error("Error signing out:", error);
@@ -229,7 +276,7 @@
         }
 
         // ----------------------------------------------------
-        // EPK PASSWORD UPDATE LOGIC - IMPLEMENTED BUG FIX
+        // EPK PASSWORD UPDATE LOGIC
         // ----------------------------------------------------
         const newPasswordInput = document.getElementById('new-password-input');
         const updatePasswordButton = document.getElementById('update-password-button');
