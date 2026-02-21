@@ -9,6 +9,12 @@
       "firebase-check.html",
       "admin-login.html",
       "firebase_config.conf"
+    ],
+    "rewrites": [
+      {
+        "source": "/booking",
+        "destination": "/booking.html"
+      }
     ]
   },
   "firestore": {
