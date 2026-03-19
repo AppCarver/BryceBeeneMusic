@@ -358,6 +358,59 @@ tbody td {
   color: #a8d878;
 }
 
+/* --- Archive Toggle --- */
+.archive-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.archive-toggle input[type="checkbox"] {
+  accent-color: var(--accent-green);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.archive-toggle:hover {
+  color: var(--accent-cream);
+}
+
+/* --- Archived Section --- */
+.archived-section {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.archived-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  border-top: 1px dashed var(--border);
+  padding-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* --- Archived card state --- */
+.card.archived {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+.card.archived:hover {
+  opacity: 0.9;
+}
+
+tr.archived td {
+  opacity: 0.6;
+  font-style: italic;
+}
+
 /* --- Footer --- */
 .site-footer {
   border-top: 1px solid var(--border);

@@ -1,0 +1,41 @@
+{
+  "songs": [
+    {
+      "title": "In Color",
+      "artist": "Jamey Johnson",
+      "key": "A",
+      "capo": 2,
+      "tags": ["country"],
+      "chord_chart": "band-docs/songs/chord-charts/in-color.md",
+      "number_chart": "band-docs/songs/number-charts/in-color.md",
+      "archived": false
+    }
+  ],
+  "setlists": [
+    {
+      "title": "Working Repertoire",
+      "description": "Full 3-set working repertoire — all 29 songs",
+      "file": "band-docs/setlists/2026-03-19_working-repertoire.md",
+      "archived": false
+    },
+    {
+      "title": "Madam Pearl's — Apr 24",
+      "description": "2 sets · 75 min each · Fort Worth, TX",
+      "file": "band-docs/setlists/2026-04-24_pearls-saloon.md",
+      "gig": "band-docs/gigs/2026-04-24_pearls-saloon.md",
+      "archived": false
+    }
+  ],
+  "gigs": [
+    {
+      "date": "2026-04-24",
+      "venue": "Madam Pearl's Dancehall & Saloon",
+      "city": "Fort Worth, TX",
+      "status": "confirmed",
+      "file": "band-docs/gigs/2026-04-24_pearls-saloon.md",
+      "setlist": "band-docs/setlists/2026-04-24_pearls-saloon.md",
+      "archived": false
+    }
+  ],
+  "rehearsals": []
+}
