@@ -1,135 +1,135 @@
 # In Color
 **Artist:** Jamey Johnson
-**Key:** A (sounding) | **Capo:** 2 | **Chords as fingered:** G F C G shapes
+**Key:** A (sounding) | **Capo:** 2 | **Fingered:** G shapes
 **Tempo:** Medium | **Feel:** Straight | **Time:** 4/4
 
 ---
 
 ## Intro
 
+```text
 G   F   C   G
-
----
+```
 
 ## Verse 1
 
-         G
+```text
+     G
 I said, Grandpa what's this picture here
-         F
+F
 It's all black and white and it ain't real clear
-     C                                  G
+C                                  G
 Is that you there? He said yeah, I was 11
 G
 Times were tough back in '35
-       F
+F
 That's me and Uncle Joe just tryin' to survive
-  C
-A cotton farm
-              G
-And a great depression
-
----
+C                          G
+A cotton farm and a great depression
+```
 
 ## Chorus
 
-      G
+```text
+  G
 If it looks like we were scared to death
-       F                                       C
+F                                       C
 Like a couple of kids just tryin' to save each other
-                          G
+G
 You should've seen it in color
-
----
+```
 
 ## Verse 2
 
-        G
+```text
+    G
 Aw, and this one here's taken overseas
-       F
+F
 In the middle of Hell in 1943
-       C                                  G
+C                                  G
 In the winter time, you can almost see my breath
-         G
+G
 That was my tail gunner, Ole Johnny McGee
-         F
+F
 He was a High School teacher from New Orleans
-       C                                     G
+C                                     G
 And he had my back, right through the day we left
-
----
+```
 
 ## Chorus
 
-      G
-If it looks like we were scared to death
-       F                                       C
-Like a couple of kids just tryin' to save each other
-                          G
-You should've seen it in color
+```text
   G
-A picture's worth a thousand words
-        F                                         C
-But you can't see what those shades of gray keep covered
-                          G
+If it looks like we were scared to death
+F                                       C
+Like a couple of kids just tryin' to save each other
+G
 You should've seen it in color
-
----
+G
+A picture's worth a thousand words
+F                                         C
+But you can't see what those shades of gray keep covered
+G
+You should've seen it in color
+```
 
 ## Solo
 
+```text
 G   F   C   G
 G
-
----
+```
 
 ## Verse 3
 
+```text
 G
 This one is my favorite one
-        F
+F
 This is me and grandma in the summer sun
- C                                 G
+C                                 G
 All dressed up the day we said our vows
-          G
+G
 You can't tell it here but it was hot that June
-     F
+F
 That rose was red and her eyes were blue
-         C                            G
+C                            G
 And just look at that smile, I was so proud
-
----
+```
 
 ## Bridge
 
+```text
 Em              D/F#        C
-     That's the story of my life
+That's the story of my life
 Em         D/F#                C  D
-     Right there in black and white
+Right there in black and white
+```
 
----
+## Final Chorus
 
-## Chorus
-
-          G
+```text
+      G
 And if it looks like we were scared to death
-       F                                       C
+F                                       C
 Like a couple of kids just tryin' to save each other
-                          G
+G
 You should've seen it in color
-  G
+G
 A picture's worth a thousand words
-        F     N.C.                                C
+F     N.C.                                C
 But you can't see what those shades of gray keep covered
-                          G
+G
 You should've seen it in color
-
----
+```
 
 ## Outro
 
+```text
 G   F   C   G
 G   F   C   G
 (2nd time quietly)
+```
 
 ---
 

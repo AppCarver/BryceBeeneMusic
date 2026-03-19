@@ -18,6 +18,7 @@
 
 ## Chart
 
+```text
 INTRO (4 bars)
 | 1 _ _ _ | b7 _ _ _ | 4 _ _ _ | 1 _ _ _ |
 
@@ -60,6 +61,7 @@ OUTRO (8 bars)
 | 1 _ _ _ | b7 _ _ _ | 4 _ _ _ | 1 _ _ _ |
 | 1 _ _ _ | b7 _ _ _ | 4 _ _ _ | 1 _ _ _ |
 (2nd time quietly — pull back dynamics)
+```
 
 ---
 

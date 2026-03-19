@@ -31,6 +31,7 @@ last_updated: YYYY-MM-DD
 
 ## Chart
 
+```text
 INTRO (4 bars)
 | 1 _ _ _ | 4 _ _ _ | 1 _ _ _ | 5 _ _ _ |
 
@@ -56,6 +57,7 @@ Repeat — 2nd time BIG
 
 OUTRO
 | 1 _ _ _ | 4 _ _ _ | 1 _ _ _ | 1 (stop) |
+```
 
 ---
 
@@ -65,10 +67,3 @@ OUTRO
 - Ending: describe the ending cue
 - Modulation: none
 - Special instructions: none
-```
-
----
-
-Paste that into Cursor and tell it:
-```
-Populate band-docs/songs/number-charts/_template.md with exactly this content, replacing what is there.
