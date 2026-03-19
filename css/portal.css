@@ -391,59 +391,125 @@ tbody td {
 
 /* --- Print / Save as PDF --- */
 @media print {
+
+  /* Hide everything except the chart content */
   .site-header,
   .site-footer,
   .back-link,
-  .btn-download,
-  .file-toolbar {
+  .file-toolbar,
+  .btn-download {
     display: none !important;
+    visibility: hidden !important;
   }
 
-  body {
-    background-color: #ffffff;
-    color: #000000;
-  }
-
-  .viewer-content {
+  /* Clean white page */
+  html, body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+    margin: 0;
     padding: 0;
   }
 
-  .viewer-content h1,
-  .viewer-content h2,
+  /* Remove container padding */
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Chart content */
+  .viewer-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .viewer-content h1 {
+    font-size: 18pt;
+    color: #000000 !important;
+    border-bottom: 1pt solid #cccccc;
+    margin-bottom: 8pt;
+  }
+
+  .viewer-content h2 {
+    font-size: 13pt;
+    color: #000000 !important;
+    border-bottom: 1pt solid #eeeeee;
+    margin-top: 14pt;
+    margin-bottom: 4pt;
+  }
+
   .viewer-content h3 {
-    color: #000000;
+    font-size: 11pt;
+    color: #000000 !important;
   }
 
-  .viewer-content pre {
-    background-color: #f5f5f5;
-    border: 1px solid #cccccc;
-    border-left: 3px solid #576f72;
+  .viewer-content p {
+    color: #000000 !important;
+    margin-bottom: 4pt;
   }
 
-  .viewer-content pre code {
-    color: #000000;
+  .viewer-content ul,
+  .viewer-content ol {
+    color: #000000 !important;
   }
 
   .viewer-content hr {
-    border-top: 1px solid #cccccc;
+    border: none !important;
+    border-top: 1pt solid #cccccc !important;
+    margin: 8pt 0 !important;
   }
 
+  /* Chord blocks — keep monospace, light background */
+  .viewer-content pre {
+    background-color: #f7f7f7 !important;
+    border: 1pt solid #cccccc !important;
+    border-left: 3pt solid #576f72 !important;
+    border-radius: 0 !important;
+    padding: 8pt 10pt !important;
+    margin: 4pt 0 10pt !important;
+    page-break-inside: avoid;
+  }
+
+  .viewer-content pre code {
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 9pt !important;
+    color: #000000 !important;
+    background: none !important;
+  }
+
+  /* Tables */
   .viewer-content table {
+    width: 100%;
     border-collapse: collapse;
+    font-size: 10pt;
   }
 
   .viewer-content thead th {
-    color: #000000;
-    border-bottom: 2px solid #cccccc;
+    color: #000000 !important;
+    border-bottom: 2pt solid #cccccc !important;
+    padding: 4pt 6pt !important;
   }
 
   .viewer-content tbody td {
-    color: #000000;
-    border-bottom: 1px solid #eeeeee;
+    color: #000000 !important;
+    border-bottom: 1pt solid #eeeeee !important;
+    padding: 4pt 6pt !important;
   }
 
   .viewer-content a {
-    color: #000000;
-    border-bottom: none;
+    color: #000000 !important;
+    border-bottom: none !important;
+    text-decoration: none !important;
+  }
+
+  /* Keep sections together where possible */
+  h2, h3 {
+    page-break-after: avoid;
   }
 }
