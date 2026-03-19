@@ -1,6 +1,6 @@
 # Band Members — Bryce Beene Music
 
-Last updated: YYYY-MM-DD
+Last updated: 2026-03-19
 
 ---
 
@@ -8,58 +8,72 @@ Last updated: YYYY-MM-DD
 
 | Name | Role | Phone | Email | Status |
 |------|------|-------|-------|--------|
-| | Lead vocals | | | Active |
-| | Guitar | | | Active |
-| | Bass | | | Active |
-| | Drums | | | Active |
-| | Keys | | | Active |
+| Bryce Beene | Lead Vocals | 682-208-3329 | beenebryce02@gmail.com | Active |
+| John Carver | Drums | 682-800-7072 | john.e.carver@gmail.com | Active |
+| TBD | Lead Guitar | — | — | Searching |
+| TBD | Bass | — | — | Searching |
+| TBD | Steel Guitar | — | — | Searching |
+| TBD | Fiddle | — | — | Searching |
 
 ---
 
 ## Member Details
 
-### Name
-- **Role:**
-- **Phone:**
-- **Email:**
+### Bryce Beene
+- **Role:** Lead Vocals
+- **Phone:** 682-208-3329
+- **Email:** beenebryce02@gmail.com
 - **Gear:**
-- **Notes:**
+- **Notes:** Bandleader
 
 ---
 
-### Name
-- **Role:**
-- **Phone:**
-- **Email:**
+### John Carver
+- **Role:** Drums
+- **Phone:** 682-800-7072
+- **Email:** john.e.carver@gmail.com
 - **Gear:**
-- **Notes:**
+- **Notes:** Band Operations
 
 ---
 
-### Name
-- **Role:**
-- **Phone:**
-- **Email:**
-- **Gear:**
-- **Notes:**
+### Lead Guitar
+- **Role:** Lead Guitar
+- **Status:** Searching
+- **Phone:** —
+- **Email:** —
+- **Gear:** —
+- **Notes:** —
 
 ---
 
-### Name
-- **Role:**
-- **Phone:**
-- **Email:**
-- **Gear:**
-- **Notes:**
+### Bass
+- **Role:** Bass
+- **Status:** Searching
+- **Phone:** —
+- **Email:** —
+- **Gear:** —
+- **Notes:** —
 
 ---
 
-### Name
-- **Role:**
-- **Phone:**
-- **Email:**
-- **Gear:**
-- **Notes:**
+### Steel Guitar
+- **Role:** Steel Guitar
+- **Status:** Searching
+- **Phone:** —
+- **Email:** —
+- **Gear:** —
+- **Notes:** —
+
+---
+
+### Fiddle
+- **Role:** Fiddle
+- **Status:** Searching
+- **Phone:** —
+- **Email:** —
+- **Gear:** —
+- **Notes:** —
 
 ---
 
@@ -67,18 +81,12 @@ Last updated: YYYY-MM-DD
 
 | Name | Relation | Phone |
 |------|----------|-------|
-| | | |
+| Melissa Carver| John's Wife  | 817-253-8954|
 | | | |
 
 ---
 
 ## Notes
 
-- Additional band notes here
-```
-
----
-
-Paste that into Cursor and tell it:
-```
-Populate band-docs/roster/band-members.md with exactly this content, replacing what is there.
+- Four positions currently open: Lead Guitar, Bass, Steel Guitar, Fiddle
+- Update this file as positions are filled
