@@ -18,11 +18,12 @@ Firebase-authenticated member portal.
 ### 🟡 TRACK 1 — Website Cleanup (existing site)
 
 #### Archive (move to _archive/, do not delete yet)
-- [ ] admin-login.html — redundant with admin.html, excluded from deploy
-- [ ] setup-data.html — one-time setup utility, no longer needed
-- [ ] firebase-check.html — debug/verification page, no longer needed
-- [ ] QUICK_REFERENCE.md — stale, superseded by this ROADMAP.md
-- [ ] SITE_AUDIT_REPORT.md — historical audit, move out of root
+- [x] admin-login.html — archived
+- [x] setup-data.html — archived
+- [x] firebase-check.html — archived
+- [x] QUICK_REFERENCE.md — archived
+- [x] SITE_AUDIT_REPORT.md — archived
+- [x] Delete images/howdy_maam.jpg — done
 
 #### Minor Fixes
 - [ ] Delete images/howdy_maam.jpg — orphaned, not referenced in any HTML
@@ -41,28 +42,28 @@ Goal: A complete, working documentation system on the local machine.
 Useful immediately, even before any web work begins.
 
 ##### Folder Structure
-- [ ] Create band-docs/ in project root
-- [ ] Create band-docs/songs/
-- [ ] Create band-docs/songs/chord-charts/
-- [ ] Create band-docs/songs/number-charts/
-- [ ] Create band-docs/songs/_index.md — master song list (key, tempo, feel, tags)
-- [ ] Create band-docs/setlists/
-- [ ] Create band-docs/setlists/_template.md
-- [ ] Create band-docs/gigs/
-- [ ] Create band-docs/gigs/_template.md
-- [ ] Create band-docs/rehearsals/
-- [ ] Create band-docs/rehearsals/_template.md
-- [ ] Create band-docs/roster/
-- [ ] Create band-docs/roster/band-members.md
-- [ ] Create band-docs/roster/fill-ins.md
-- [ ] Create band-docs/README.md — instructions written for fill-in musicians
+- [x] Create band-docs/ in project root
+- [x] Create band-docs/songs/
+- [x] Create band-docs/songs/chord-charts/
+- [x] Create band-docs/songs/number-charts/
+- [x] Create band-docs/songs/_index.md
+- [x] Create band-docs/setlists/
+- [x] Create band-docs/setlists/_template.md
+- [x] Create band-docs/gigs/
+- [x] Create band-docs/gigs/_template.md
+- [x] Create band-docs/rehearsals/
+- [x] Create band-docs/rehearsals/_template.md
+- [x] Create band-docs/roster/
+- [x] Create band-docs/roster/band-members.md
+- [x] Create band-docs/roster/fill-ins.md
+- [x] Create band-docs/README.md
 
 ##### Templates to Create
-- [ ] Chord-over-lyric chart template (songs/chord-charts/_template.md)
-- [ ] Nashville Number System chart template (songs/number-charts/_template.md)
-- [ ] Setlist template (setlists/_template.md)
-- [ ] Show-day info sheet template (gigs/_template.md)
-- [ ] Rehearsal plan template (rehearsals/_template.md)
+- [x] Chord-over-lyric chart template
+- [x] Nashville Number System chart template
+- [x] Setlist template
+- [x] Show-day info sheet template
+- [x] Rehearsal plan template
 
 ##### First Real Content
 - [ ] Populate songs/_index.md with current active song list
