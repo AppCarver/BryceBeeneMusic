@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chart Viewer — Bryce Beene Music</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/portal.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <a href="portal.html" class="brand">
+        Bryce Beene Music <span>Band Portal</span>
+      </a>
+      <nav>
+        <a href="portal.html#songs">Songs</a>
+        <a href="portal.html#setlists">Setlists</a>
+        <a href="portal.html#gigs">Gigs</a>
+        <a href="portal.html#rehearsals">Rehearsals</a>
+        <a href="portal.html#roster">Roster</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- Back link -->
+      <a href="portal.html" class="back-link">← Back to Portal</a>
+
+      <!-- Toolbar -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem;">
+        <div id="file-label" style="font-size:0.8rem; color:var(--text-secondary); font-family:var(--font-mono);"></div>
+        <a id="download-btn" class="btn-download" download>⬇ Download file</a>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loading" style="color:var(--text-secondary); font-size:0.9rem; padding:2rem 0;">
+        Loading...
+      </div>
+
+      <!-- Error state -->
+      <div id="error" style="display:none; color:#e07070; font-size:0.9rem; padding:2rem 0;">
+        Could not load file. Check that the path is correct and the file exists.
+      </div>
+
+      <!-- Rendered content -->
+      <div id="content" class="viewer-content" style="display:none;"></div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      Bryce Beene Music — Internal Band Portal · Not for public distribution
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+
+      // Get file path from URL parameter
+      const params = new URLSearchParams(window.location.search);
+      const file = params.get('file');
+
+      const loadingEl = document.getElementById('loading');
+      const errorEl   = document.getElementById('error');
+      const contentEl = document.getElementById('content');
+      const fileLabel = document.getElementById('file-label');
+      const downloadBtn = document.getElementById('download-btn');
+
+      // No file param — show error
+      if (!file) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        errorEl.textContent = 'No file specified. Return to the portal and select a file.';
+        return;
+      }
+
+      // Set file label and download link
+      fileLabel.textContent = file;
+      downloadBtn.href = file;
+      downloadBtn.download = file.split('/').pop();
+
+      // Set page title to filename
+      const filename = file.split('/').pop().replace('.md', '').replace(/-/g, ' ');
+      document.title = filename + ' — Bryce Beene Music';
+
+      // Configure marked
+      marked.setOptions({
+        breaks: true,
+        gfm: true
+      });
+
+      // Fetch and render the file
+      fetch(file)
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error('File not found: ' + response.status);
+          }
+          return response.text();
+        })
+        .then(function (markdown) {
+          loadingEl.style.display = 'none';
+          contentEl.style.display = 'block';
+          contentEl.innerHTML = marked.parse(markdown);
+        })
+        .catch(function (err) {
+          loadingEl.style.display = 'none';
+          errorEl.style.display = 'block';
+          console.error('Viewer error:', err);
+        });
+
+    })();
+  </script>
+
+</body>
+</html>

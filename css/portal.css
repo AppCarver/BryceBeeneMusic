@@ -1,0 +1,390 @@
+/* ============================================
+   Portal & Viewer — Bryce Beene Music
+   Internal band member tool
+   ============================================ */
+
+/* --- Variables --- */
+:root {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --bg-card: #2d2d2d;
+  --border: #3e3e3e;
+  --text-primary: #f8f0e5;
+  --text-secondary: #a0998f;
+  --accent-navy: #0b2447;
+  --accent-cream: #f8f0e5;
+  --accent-green: #576f72;
+  --highlight: #1e3a5f;
+  --font-headline: 'Lora', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+}
+
+/* --- Reset --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Base --- */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent-cream);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-green);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+a:hover {
+  color: #ffffff;
+  border-bottom-color: var(--accent-cream);
+}
+
+/* --- Layout --- */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* --- Header --- */
+.site-header {
+  background-color: var(--accent-navy);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header .brand {
+  font-family: var(--font-headline);
+  font-size: 1.2rem;
+  color: var(--accent-cream);
+  border-bottom: none;
+}
+
+.site-header .brand span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  margin-left: 0.75rem;
+}
+
+.site-header nav a {
+  font-size: 0.9rem;
+  margin-left: 1.5rem;
+  border-bottom: none;
+  color: var(--text-secondary);
+}
+
+.site-header nav a:hover {
+  color: var(--accent-cream);
+}
+
+/* --- Page Title --- */
+.page-title {
+  padding: 2.5rem 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.page-title h1 {
+  font-family: var(--font-headline);
+  font-size: 1.8rem;
+  color: var(--accent-cream);
+  margin-bottom: 0.25rem;
+}
+
+.page-title p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* --- Cards --- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.card:hover {
+  border-color: var(--accent-green);
+  background-color: var(--highlight);
+}
+
+.card h3 {
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  color: var(--accent-cream);
+  margin-bottom: 0.4rem;
+}
+
+.card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.card .card-links a {
+  font-size: 0.8rem;
+  margin-right: 0.75rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.card .card-links a:hover {
+  color: var(--accent-cream);
+  border-bottom-color: var(--accent-green);
+}
+
+/* --- Section Headers --- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section-header h2 {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* --- Tables --- */
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+thead tr {
+  border-bottom: 2px solid var(--border);
+}
+
+thead th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.15s;
+}
+
+tbody tr:hover {
+  background-color: var(--bg-card);
+}
+
+tbody td {
+  padding: 0.6rem 0.75rem;
+  color: var(--text-primary);
+}
+
+/* --- Viewer Content --- */
+.viewer-content {
+  padding: 2rem 0 4rem;
+}
+
+.viewer-content h1,
+.viewer-content h2,
+.viewer-content h3 {
+  font-family: var(--font-headline);
+  color: var(--accent-cream);
+  margin: 1.5rem 0 0.75rem;
+}
+
+.viewer-content h1 {
+  font-size: 1.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.viewer-content h2 {
+  font-size: 1.2rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.viewer-content h3 {
+  font-size: 1rem;
+}
+
+.viewer-content p {
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.viewer-content ul,
+.viewer-content ol {
+  margin: 0.5rem 0 0.75rem 1.5rem;
+  color: var(--text-primary);
+}
+
+.viewer-content li {
+  margin-bottom: 0.25rem;
+}
+
+.viewer-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+.viewer-content table {
+  margin-bottom: 1rem;
+}
+
+/* --- Code blocks (chord charts) --- */
+.viewer-content pre {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-green);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.viewer-content pre code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-cream);
+  background: none;
+  padding: 0;
+}
+
+.viewer-content code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background-color: var(--bg-card);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  color: var(--accent-cream);
+}
+
+/* --- Back link --- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border-bottom: none;
+  margin: 1.5rem 0;
+}
+
+.back-link:hover {
+  color: var(--accent-cream);
+}
+
+/* --- Download button --- */
+.btn-download {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  background-color: var(--accent-navy);
+  color: var(--accent-cream);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none;
+}
+
+.btn-download:hover {
+  background-color: var(--highlight);
+  border-color: var(--accent-green);
+}
+
+/* --- Badge --- */
+.badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: var(--accent-navy);
+  color: var(--accent-cream);
+  border: 1px solid var(--border);
+}
+
+.badge.original {
+  background-color: #2d4a1e;
+  border-color: #4a7a32;
+  color: #a8d878;
+}
+
+/* --- Footer --- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0;
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* --- Responsive --- */
+@media (max-width: 640px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-header .container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .site-header nav a:first-child {
+    margin-left: 0;
+  }
+
+  .page-title h1 {
+    font-size: 1.4rem;
+  }
+}

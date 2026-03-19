@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Band Portal — Bryce Beene Music</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/portal.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <a href="portal.html" class="brand">
+        Bryce Beene Music <span>Band Portal</span>
+      </a>
+      <nav>
+        <a href="#songs">Songs</a>
+        <a href="#setlists">Setlists</a>
+        <a href="#gigs">Gigs</a>
+        <a href="#rehearsals">Rehearsals</a>
+        <a href="#roster">Roster</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- Page Title -->
+      <div class="page-title">
+        <h1>Band Portal</h1>
+        <p>Charts, setlists, gig info, and rehearsal plans — all in one place.</p>
+      </div>
+
+      <!-- Songs -->
+      <section id="songs">
+        <div class="section-header">
+          <h2>Songs</h2>
+          <a href="viewer.html?file=band-docs/songs/_index.md">View full index →</a>
+        </div>
+        <div class="card-grid">
+
+          <div class="card">
+            <h3>Song Index</h3>
+            <p>Full list of all active songs — key, tempo, feel, and links to charts.</p>
+            <div class="card-links">
+              <a href="viewer.html?file=band-docs/songs/_index.md">Open index</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>In Color</h3>
+            <p>Jamey Johnson — Key: A (Capo 2)</p>
+            <div class="card-links">
+              <a href="viewer.html?file=band-docs/songs/chord-charts/in-color.md">Chord chart</a>
+              <a href="viewer.html?file=band-docs/songs/number-charts/in-color.md">NNS chart</a>
+            </div>
+          </div>
+
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:-1rem; margin-bottom:2rem;">
+          More charts added here as they are built.
+        </p>
+      </section>
+
+      <!-- Setlists -->
+      <section id="setlists">
+        <div class="section-header">
+          <h2>Setlists</h2>
+        </div>
+        <div class="card-grid">
+
+          <div class="card">
+            <h3>Working Repertoire</h3>
+            <p>Full 3-set working repertoire — all 29 songs.</p>
+            <div class="card-links">
+              <a href="viewer.html?file=band-docs/setlists/2026-03-19_working-repertoire.md">View setlist</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Madam Pearl's — Apr 24</h3>
+            <p>2 sets · 75 min each · Fort Worth, TX</p>
+            <div class="card-links">
+              <a href="viewer.html?file=band-docs/setlists/2026-04-24_pearls-saloon.md">View setlist</a>
+              <a href="viewer.html?file=band-docs/gigs/2026-04-24_pearls-saloon.md">Gig info</a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Gigs -->
+      <section id="gigs">
+        <div class="section-header">
+          <h2>Gigs</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>City</th>
+                <th>Status</th>
+                <th>Info</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026-04-24</td>
+                <td>Madam Pearl's Dancehall & Saloon</td>
+                <td>Fort Worth, TX</td>
+                <td><span class="badge">Confirmed</span></td>
+                <td><a href="viewer.html?file=band-docs/gigs/2026-04-24_pearls-saloon.md">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Rehearsals -->
+      <section id="rehearsals">
+        <div class="section-header">
+          <h2>Rehearsals</h2>
+        </div>
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:2rem;">
+          No rehearsals scheduled yet. Files will appear here when created.
+        </p>
+      </section>
+
+      <!-- Roster -->
+      <section id="roster">
+        <div class="section-header">
+          <h2>Roster</h2>
+        </div>
+        <div class="card-grid">
+
+          <div class="card">
+            <h3>Band Members</h3>
+            <p>Active roster, roles, and contact info.</p>
+            <div class="card-links">
+              <a href="viewer.html?file=band-docs/roster/band-members.md">View roster</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Fill-Ins</h3>
+            <p>Trusted fill-in musicians and onboarding info.</p>
+            <div class="card-links">
+              <a href="viewer.html?file=band-docs/roster/fill-ins.md">View fill-ins</a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      Bryce Beene Music — Internal Band Portal · Not for public distribution
+    </div>
+  </footer>
+
+</body>
+</html>

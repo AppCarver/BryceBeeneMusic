@@ -8,7 +8,8 @@
       "setup-data.html",
       "firebase-check.html",
       "admin-login.html",
-      "firebase_config.conf"
+      "firebase_config.conf",
+      "_archive/**"
     ],
     "rewrites": [
       {
