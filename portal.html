@@ -40,48 +40,26 @@
       <section id="songs">
         <div class="section-header">
           <h2>Songs</h2>
-          <div style="display:flex; align-items:center; gap:1rem;">
-            <label class="archive-toggle">
-              <input type="checkbox" id="toggle-songs-archive" onchange="renderSongs()">
-              Show archived
-            </label>
-            <a href="viewer.html?file=band-docs/songs/_index.md">View full index →</a>
-          </div>
+          <a href="viewer.html?file=band-docs/songs/_index.md">View full index →</a>
         </div>
-        <div id="songs-active" class="card-grid"></div>
-        <div id="songs-archived" class="archived-section" style="display:none;">
-          <div class="archived-label">Archived Songs</div>
-          <div id="songs-archive-grid" class="card-grid"></div>
-        </div>
+        <div id="songs-grid" class="card-grid"></div>
       </section>
 
       <!-- Setlists -->
       <section id="setlists">
         <div class="section-header">
           <h2>Setlists</h2>
-          <label class="archive-toggle">
-            <input type="checkbox" id="toggle-setlists-archive" onchange="renderSetlists()">
-            Show archived
-          </label>
         </div>
-        <div id="setlists-active" class="card-grid"></div>
-        <div id="setlists-archived" class="archived-section" style="display:none;">
-          <div class="archived-label">Archived Setlists</div>
-          <div id="setlists-archive-grid" class="card-grid"></div>
-        </div>
+        <div id="setlists-grid" class="card-grid"></div>
       </section>
 
       <!-- Gigs -->
       <section id="gigs">
         <div class="section-header">
           <h2>Gigs</h2>
-          <label class="archive-toggle">
-            <input type="checkbox" id="toggle-gigs-archive" onchange="renderGigs()">
-            Show archived
-          </label>
         </div>
         <div class="table-wrap">
-          <table id="gigs-table">
+          <table>
             <thead>
               <tr>
                 <th>Date</th>
@@ -91,25 +69,8 @@
                 <th>Info</th>
               </tr>
             </thead>
-            <tbody id="gigs-active"></tbody>
+            <tbody id="gigs-tbody"></tbody>
           </table>
-        </div>
-        <div id="gigs-archived" class="archived-section" style="display:none;">
-          <div class="archived-label">Archived Gigs</div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Venue</th>
-                  <th>City</th>
-                  <th>Status</th>
-                  <th>Info</th>
-                </tr>
-              </thead>
-              <tbody id="gigs-archive-tbody"></tbody>
-            </table>
-          </div>
         </div>
       </section>
 
@@ -117,16 +78,8 @@
       <section id="rehearsals">
         <div class="section-header">
           <h2>Rehearsals</h2>
-          <label class="archive-toggle">
-            <input type="checkbox" id="toggle-rehearsals-archive" onchange="renderRehearsals()">
-            Show archived
-          </label>
         </div>
-        <div id="rehearsals-active" class="card-grid"></div>
-        <div id="rehearsals-archived" class="archived-section" style="display:none;">
-          <div class="archived-label">Archived Rehearsals</div>
-          <div id="rehearsals-archive-grid" class="card-grid"></div>
-        </div>
+        <div id="rehearsals-grid" class="card-grid"></div>
         <p id="rehearsals-empty" style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:2rem; display:none;">
           No rehearsals scheduled yet. Files will appear here when created.
         </p>
@@ -165,144 +118,78 @@
   </footer>
 
   <script>
-    let manifest = null;
-
-    // Load manifest on page load
     fetch('band-docs/manifest.json')
       .then(r => r.json())
       .then(data => {
-        manifest = data;
-        renderSongs();
-        renderSetlists();
-        renderGigs();
-        renderRehearsals();
+        renderSongs(data.songs);
+        renderSetlists(data.setlists);
+        renderGigs(data.gigs);
+        renderRehearsals(data.rehearsals);
       })
       .catch(err => console.error('Failed to load manifest:', err));
 
-    // --- Songs ---
-    function renderSongs() {
-      const showArchived = document.getElementById('toggle-songs-archive').checked;
-      const active = manifest.songs.filter(s => !s.archived);
-      const archived = manifest.songs.filter(s => s.archived);
-
-      document.getElementById('songs-active').innerHTML = active.map(songCard).join('');
-
-      if (showArchived && archived.length > 0) {
-        document.getElementById('songs-archived').style.display = 'block';
-        document.getElementById('songs-archive-grid').innerHTML = archived.map(songCard).join('');
-      } else {
-        document.getElementById('songs-archived').style.display = 'none';
-      }
+    function renderSongs(songs) {
+      const active = songs.filter(s => !s.archived);
+      document.getElementById('songs-grid').innerHTML = active.map(s => {
+        const capo = s.capo ? ` · Capo ${s.capo}` : '';
+        const tags = s.tags ? s.tags.map(t =>
+          `<span class="badge">${t}</span>`).join(' ') : '';
+        return `
+          <div class="card">
+            <h3>${s.title}</h3>
+            <p>${s.artist} — Key: ${s.key}${capo}</p>
+            ${tags ? `<p style="margin-bottom:0.5rem;">${tags}</p>` : ''}
+            <div class="card-links">
+              ${s.chord_chart ? `<a href="viewer.html?file=${s.chord_chart}">Chord chart</a>` : ''}
+              ${s.number_chart ? `<a href="viewer.html?file=${s.number_chart}">NNS chart</a>` : ''}
+            </div>
+          </div>`;
+      }).join('');
     }
 
-    function songCard(s) {
-      const capo = s.capo ? ` · Capo ${s.capo}` : '';
-      const tags = s.tags ? s.tags.map(t => `<span class="badge">${t}</span>`).join(' ') : '';
-      return `
-        <div class="card ${s.archived ? 'archived' : ''}">
-          <h3>${s.title}</h3>
-          <p>${s.artist} — Key: ${s.key}${capo}</p>
-          ${tags ? `<p style="margin-bottom:0.5rem;">${tags}</p>` : ''}
-          <div class="card-links">
-            ${s.chord_chart ? `<a href="viewer.html?file=${s.chord_chart}">Chord chart</a>` : ''}
-            ${s.number_chart ? `<a href="viewer.html?file=${s.number_chart}">NNS chart</a>` : ''}
-          </div>
-        </div>`;
-    }
-
-    // --- Setlists ---
-    function renderSetlists() {
-      const showArchived = document.getElementById('toggle-setlists-archive').checked;
-      const active = manifest.setlists.filter(s => !s.archived);
-      const archived = manifest.setlists.filter(s => s.archived);
-
-      document.getElementById('setlists-active').innerHTML = active.map(setlistCard).join('');
-
-      if (showArchived && archived.length > 0) {
-        document.getElementById('setlists-archived').style.display = 'block';
-        document.getElementById('setlists-archive-grid').innerHTML = archived.map(setlistCard).join('');
-      } else {
-        document.getElementById('setlists-archived').style.display = 'none';
-      }
-    }
-
-    function setlistCard(s) {
-      return `
-        <div class="card ${s.archived ? 'archived' : ''}">
+    function renderSetlists(setlists) {
+      const active = setlists.filter(s => !s.archived);
+      document.getElementById('setlists-grid').innerHTML = active.map(s => `
+        <div class="card">
           <h3>${s.title}</h3>
           <p>${s.description}</p>
           <div class="card-links">
             <a href="viewer.html?file=${s.file}">View setlist</a>
             ${s.gig ? `<a href="viewer.html?file=${s.gig}">Gig info</a>` : ''}
           </div>
-        </div>`;
+        </div>`).join('');
     }
 
-    // --- Gigs ---
-    function renderGigs() {
-      const showArchived = document.getElementById('toggle-gigs-archive').checked;
-      const active = manifest.gigs.filter(g => !g.archived);
-      const archived = manifest.gigs.filter(g => g.archived);
-
-      document.getElementById('gigs-active').innerHTML = active.map(gigRow).join('');
-
-      if (showArchived && archived.length > 0) {
-        document.getElementById('gigs-archived').style.display = 'block';
-        document.getElementById('gigs-archive-tbody').innerHTML = archived.map(gigRow).join('');
-      } else {
-        document.getElementById('gigs-archived').style.display = 'none';
-      }
-    }
-
-    function gigRow(g) {
-      const setlistLink = g.setlist
-        ? `<a href="viewer.html?file=${g.setlist}" style="margin-left:0.5rem;">Setlist</a>` : '';
-      return `
-        <tr class="${g.archived ? 'archived' : ''}">
+    function renderGigs(gigs) {
+      const active = gigs.filter(g => !g.archived);
+      document.getElementById('gigs-tbody').innerHTML = active.map(g => `
+        <tr>
           <td>${g.date}</td>
           <td>${g.venue}</td>
           <td>${g.city}</td>
           <td><span class="badge">${g.status}</span></td>
           <td>
             <a href="viewer.html?file=${g.file}">View</a>
-            ${setlistLink}
+            ${g.setlist ? `<a href="viewer.html?file=${g.setlist}" style="margin-left:0.5rem;">Setlist</a>` : ''}
           </td>
-        </tr>`;
+        </tr>`).join('');
     }
 
-    // --- Rehearsals ---
-    function renderRehearsals() {
-      const showArchived = document.getElementById('toggle-rehearsals-archive').checked;
-      const active = manifest.rehearsals.filter(r => !r.archived);
-      const archived = manifest.rehearsals.filter(r => r.archived);
-
+    function renderRehearsals(rehearsals) {
+      const active = rehearsals.filter(r => !r.archived);
       const emptyEl = document.getElementById('rehearsals-empty');
-
-      if (active.length === 0 && !showArchived) {
+      if (active.length === 0) {
         emptyEl.style.display = 'block';
-        document.getElementById('rehearsals-active').innerHTML = '';
-      } else {
-        emptyEl.style.display = 'none';
-        document.getElementById('rehearsals-active').innerHTML = active.map(rehearsalCard).join('');
+        return;
       }
-
-      if (showArchived && archived.length > 0) {
-        document.getElementById('rehearsals-archived').style.display = 'block';
-        document.getElementById('rehearsals-archive-grid').innerHTML = archived.map(rehearsalCard).join('');
-      } else {
-        document.getElementById('rehearsals-archived').style.display = 'none';
-      }
-    }
-
-    function rehearsalCard(r) {
-      return `
-        <div class="card ${r.archived ? 'archived' : ''}">
+      document.getElementById('rehearsals-grid').innerHTML = active.map(r => `
+        <div class="card">
           <h3>${r.date}</h3>
           <p>${r.description || ''}</p>
           <div class="card-links">
             <a href="viewer.html?file=${r.file}">View plan</a>
           </div>
-        </div>`;
+        </div>`).join('');
     }
   </script>
 
